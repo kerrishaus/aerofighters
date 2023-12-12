@@ -1,8 +1,8 @@
 $(document).ready(function()
 {
     $(".window.draggable").draggable({ 
-    	cancel: '.window-body',
-    	containment: 'body',
+    	handle: ".title-bar",
+    	containment: "body",
     	scroll: false
     });
     
