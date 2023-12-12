@@ -20,13 +20,7 @@
 		        const fighter1box = $(".fighter1");
 		        const fighter2box = $(".fighter1");
 		        
-		        let fighters = 0;
-		        
-		        const fighers = [
-		            {
-                        name: "Mysterious Stranger",
-                        icon: "https://kerrishaus.com/assets/images/obsolete.png",
-                    },
+		        const fighters = [
                     {
                         name: "Idiot",
                         icon: "https://storage.googleapis.com/pai-images/117f5912fbbc49ef9769ac8f001407bf.jpeg",
@@ -57,10 +51,8 @@
 		        {
 		            constructor(health, strength)
 		            {
-		                this.fighterId = ++fighters;
+		                this.fighterId = Math.floor(Math.random() * fighters.length);
 
-                        console.log(fighters[1]);
-		                
 		                this.name     = fighters[this.fighterId].name;
 		                this.health   = health;
 		                this.strength = strength;
@@ -150,17 +142,19 @@
                     if (f1Damage > f2Damage)
                     {
                         console.log("F1 wins!");
+                        $(`.fighter[data-fighterId="${f2.fighterId}"]`).append("<div id='attackResult'>" + f1Damage + "</div>");
                         f2.damage(f1Damage);
 
                     }
                     else if (f2Damage > f1Damage)
                     {
                         console.log("F2 wins!");
+                        $(`.fighter[data-fighterId="${f1.fighterId}"]`).append("<div id='attackResult'>" + f2Damage + "</div>");
                         f1.damage(f2Damage);
                     }
                     else
                     {
-                        $(".window-body").append("<div class='draw'>Draw!</div>");
+                        $(".window-body").append("<div id='attackResult'>Draw!</div>");
                         console.log("Round was a draw!");
                     }
                     
@@ -176,6 +170,7 @@
                             f2 = new Fighter(100, 10);
                         }
                         
+                        $("#attackResult").remove();
                         $("#attack").attr("disabled", false);
                     }, 1100);
                 });

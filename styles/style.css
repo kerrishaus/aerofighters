@@ -1,47 +1,49 @@
-* {
+*
+{
 	margin:0;
 	padding:0;
 }
-html {
+
+html
+{
 	height:100%;
 	width:100%;
 }
-body {
+
+body
+{
 	background:#eadfcd url(https://portal.kerrishaus.com/assets/images/aero.jpeg) no-repeat 0 0;
-	-moz-background-size:cover;
-	-webkit-background-size:cover;
 	background-size:cover;
 	height:100%;
 	width:100%;
-	overflow:hidden;
+	overflow: hidden;
 }
-.window {
+
+.window
+{
+	padding-bottom:46px;
+
 	height:330px;
 	width:380px;
-	left:25vw;
-	padding-bottom:46px;
+    
 	position:absolute;
+	left:25vw;
 	top:125px;
 	z-index:1;
 }
-.window .window-body {
-	-moz-border-radius:1px;
-	-webkit-border-radius:1px;
-	border-radius:1px;
+
+.window .window-body
+{
 	-moz-box-shadow:0 0 0 1px rgba(255,255,255,0.65);
 	-webkit-box-shadow:0 0 0 1px rgba(255,255,255,0.65);
 	box-shadow:0 0 0px 1px rgba(255,255,255,0.65);
 	background-color:#fff;
-	border:1px solid #666;
-	color:#000;
-	font:normal 12px/18px arial,sans-serif;
 	height:100%;
-	margin:0 6px;
 	overflow:auto;
-	padding:5px;
-	position:relative;
 }
-.window-body img {
+
+.window-body img
+{
 	background-color:#f1f1f1;
 	border:1px solid #ddd;
 	float:left;
@@ -69,6 +71,11 @@ img
 {
     margin: 0 !important;
     margin-bottom: 8px !important;
+}
+
+.fighter
+{
+    position: relative;
 }
 
 div[role="progressbar"]
@@ -142,9 +149,10 @@ div[role="progressbar"] div
     display: inline-block;
 }
 
+/* // TODO: when the image spins and causes scrollbars to flash */
 @keyframes dead
 {
-    0
+    0%
     {
         transform: rotate(0deg) scale(1);
         opacity: 1;
@@ -166,7 +174,7 @@ div[role="progressbar"] div
 
 @keyframes f1Attack
 {
-    0
+    0%
     {
         transform: translate(0, 0);
     }
@@ -184,7 +192,7 @@ div[role="progressbar"] div
 
 @keyframes f1Attack
 {
-    0
+    0%
     {
         transform: translate(0, 0);
     }
@@ -208,6 +216,39 @@ div[role="progressbar"] div
 .f2attack
 {
     animation: f2Attack 1s;
+}
+
+@keyframes attackResult
+{
+    0%
+    {
+        transform: translate(-25%, -25%) scale(1000%);
+    }
+
+    50%
+    {
+        opacity: 1;
+        transform: translate(-25%, -25%) scale(800%);
+    }
+
+    100%
+    {
+        opacity: 0;
+        transform: translate(-25%, -25%) scale(0);
+    }
+}
+
+#attackResult
+{
+    animation: attackResult 1s forwards;
+
+    /* // TODO: fix the positioning on this to make it always in the exact center of the image */
+    position: absolute;
+    top: 30%;
+    left: 50%;
+
+    color: white;
+    text-shadow: 0 0 5px black;
 }
 
 /* Resizeable */
