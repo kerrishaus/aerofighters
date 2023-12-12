@@ -1,0 +1,228 @@
+* {
+	margin:0;
+	padding:0;
+}
+html {
+	height:100%;
+	width:100%;
+}
+body {
+	background:#eadfcd url(https://portal.kerrishaus.com/assets/images/aero.jpeg) no-repeat 0 0;
+	-moz-background-size:cover;
+	-webkit-background-size:cover;
+	background-size:cover;
+	height:100%;
+	width:100%;
+	overflow:hidden;
+}
+.window {
+	height:330px;
+	width:380px;
+	left:25vw;
+	padding-bottom:46px;
+	position:absolute;
+	top:125px;
+	z-index:1;
+}
+.window .window-body {
+	-moz-border-radius:1px;
+	-webkit-border-radius:1px;
+	border-radius:1px;
+	-moz-box-shadow:0 0 0 1px rgba(255,255,255,0.65);
+	-webkit-box-shadow:0 0 0 1px rgba(255,255,255,0.65);
+	box-shadow:0 0 0px 1px rgba(255,255,255,0.65);
+	background-color:#fff;
+	border:1px solid #666;
+	color:#000;
+	font:normal 12px/18px arial,sans-serif;
+	height:100%;
+	margin:0 6px;
+	overflow:auto;
+	padding:5px;
+	position:relative;
+}
+.window-body img {
+	background-color:#f1f1f1;
+	border:1px solid #ddd;
+	float:left;
+	margin:0 20px 10px 0;
+	padding:1px;
+}
+
+/*
+.title-bar-text::before
+{
+    content: "";
+    display: inline-block;
+    background: url("../img/sf.ico");
+    background-size: contain;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    margin-bottom: -10px;
+    position: relative;
+    top: -7px;
+}
+*/
+
+img
+{
+    margin: 0 !important;
+    margin-bottom: 8px !important;
+}
+
+div[role="progressbar"]
+{
+    margin-bottom: 8px;
+}
+
+div[role="progressbar"] div
+{
+    transition: width 0.25s;
+}
+
+.abilities
+{
+    white-space: nowrap;
+}
+
+.abilities .fa-solid
+{
+    font-size: 18px !important;
+    min-width: 22px;
+    padding: 4px;
+    text-align: center;
+    display: inline-block;
+    border: 1px solid #CDD7DB;
+    border-radius: 5px 5px 0 0;
+    border-bottom: none;
+    
+    margin-top: -5px;
+    position: relative;
+    top: 10px;
+    
+    transition: background-color 0.25s;
+}
+
+.fighter[data-fighterId="1"] .abilities .fa-solid:hover
+{
+    background-color: #BFF6FF;
+}
+
+.fighter[data-fighterId="1"] .abilities .fa-solid
+{
+    color: goldenrod;
+}
+
+.fighter[data-fighterId="2"] .abilities .fa-solid
+{
+    color: darkred;
+}
+
+@keyframes shake {
+    0% { -webkit-transform: translate(2px, 1px) rotate(0deg); } 
+    10% { -webkit-transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { -webkit-transform: translate(-3px, 0px) rotate(1deg); }
+    30% { -webkit-transform: translate(0px, 2px) rotate(0deg); }
+    40% { -webkit-transform: translate(1px, -1px) rotate(1deg); }
+    50% { -webkit-transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { -webkit-transform: translate(-3px, 1px) rotate(0deg); }
+    70% { -webkit-transform: translate(2px, 1px) rotate(-1deg); }
+    80% { -webkit-transform: translate(-1px, -1px) rotate(1deg); }
+    90% { -webkit-transform: translate(2px, 2px) rotate(0deg); }
+    100% { -webkit-transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.shake
+{
+    animation-name: shake;
+    animation-duration: 0.5s;
+    transform-origin:50% 50%;
+    animation-iteration-count: infinite;
+    display: inline-block;
+}
+
+@keyframes dead
+{
+    0
+    {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+    
+    100%
+    {
+        transform: rotate(360deg) scale(0);
+        opacity: 0;
+    }
+}
+
+.dead
+{
+    animation-name: dead;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes f1Attack
+{
+    0
+    {
+        transform: translate(0, 0);
+    }
+    
+    50%
+    {
+        transform: translate(50px, 0);
+    }
+    
+    100%
+    {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes f1Attack
+{
+    0
+    {
+        transform: translate(0, 0);
+    }
+    
+    50%
+    {
+        transform: translate(-50px, 0);
+    }
+    
+    100%
+    {
+        transform: translate(0, 0);
+    }
+}
+
+.f1attack
+{
+    animation: f1Attack 1s;
+}
+
+.f2attack
+{
+    animation: f2Attack 1s;
+}
+
+/* Resizeable */
+.ui-resizable-handle{display:block;position:absolute;}
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle{display:none;}
+.ui-resizable-n,.ui-resizable-s{height:7px;left:0;width:100%;}
+.ui-resizable-n{cursor:n-resize;top:-5px;}
+.ui-resizable-s{bottom:-5px;cursor:s-resize;}
+.ui-resizable-e,.ui-resizable-w{height:100%;top:0;width:7px;}
+.ui-resizable-e{cursor:e-resize;right:-5px;}
+.ui-resizable-w{cursor:w-resize;left:-5px;}
+.ui-resizable-se,.ui-resizable-sw,
+.ui-resizable-nw,.ui-resizable-ne{height:12px;width:12px;}
+.ui-resizable-se{bottom:0;cursor:se-resize;right:0;}
+.ui-resizable-sw{bottom:0;cursor:sw-resize;left:0;}
+.ui-resizable-nw{cursor:nw-resize;left:0;top:0;}
+.ui-resizable-ne {cursor:ne-resize;right:0;top:0;}
