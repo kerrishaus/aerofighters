@@ -22,40 +22,53 @@
 		        
 		        let fighters = 0;
 		        
-		        const fighterNames = [
-		            "Dummy",
-		            "Idiot",
-		            "Cpt. Dumbass",
-		            "Scheisseguy",
-		            "Ratking",
-		            "Marty",
-		            "Johnny",
+		        const fighers = [
+		            {
+                        name: "Mysterious Stranger",
+                        icon: "https://kerrishaus.com/assets/images/obsolete.png",
+                    },
+                    {
+                        name: "Idiot",
+                        icon: "https://storage.googleapis.com/pai-images/117f5912fbbc49ef9769ac8f001407bf.jpeg",
+                    },
+		            {
+                        name: "Cpt. Dumbass",
+                        icon: "https://images.nightcafe.studio/jobs/GtAh6V3QdZdzzdPUWj3z/GtAh6V3QdZdzzdPUWj3z--1--ydtfm.jpg?tr=w-1600,c-at_max",
+                    },
+		            {
+                        name: "Scheisseguy",
+                        icon: "https://pics.craiyon.com/2023-05-28/79670a78bea949dd95f00227c0e876a8.webp",
+                    },
+		            {
+                        name: "Ratking",
+                        icon: "https://pics.craiyon.com/2023-11-02/42281b3901b44fac942b1c0eec71ac13.webp",
+                    },
+		            {
+                        name: "Marty",
+                        icon: "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/336720870/original/a644127bd1876cca147c385cd3e1a8487709751d/design-character-concept-art-illustration-art.png",
+                    },
+		            {
+                        name: "Johnny",
+                        icon: "https://storage.googleapis.com/pai-images/94c98640e2d849958dc17fd0dcc8b2b1.jpeg"
+                    }
 	            ]
 		        
-		        const fighterIcons = [
-		            "https://kerrishaus.com/assets/images/obsolete.png",
-		            "https://storage.googleapis.com/pai-images/117f5912fbbc49ef9769ac8f001407bf.jpeg",
-		            "https://images.nightcafe.studio/jobs/GtAh6V3QdZdzzdPUWj3z/GtAh6V3QdZdzzdPUWj3z--1--ydtfm.jpg?tr=w-1600,c-at_max",
-		            "https://pics.craiyon.com/2023-05-28/79670a78bea949dd95f00227c0e876a8.webp",
-		            "https://pics.craiyon.com/2023-11-02/42281b3901b44fac942b1c0eec71ac13.webp",
-		            "https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/336720870/original/a644127bd1876cca147c385cd3e1a8487709751d/design-character-concept-art-illustration-art.png",
-		            "https://storage.googleapis.com/pai-images/94c98640e2d849958dc17fd0dcc8b2b1.jpeg"
-	            ]
-	            
 		        class Fighter
 		        {
 		            constructor(health, strength)
 		            {
 		                this.fighterId = ++fighters;
+
+                        console.log(fighters[1]);
 		                
-		                this.name = fighterNames[this.fighterId];
-		                this.health = health;
+		                this.name     = fighters[this.fighterId].name;
+		                this.health   = health;
 		                this.strength = strength;
 		                
 		                $("#fighters").append(`
                         <fieldset class="fighter" data-fighterId="${this.fighterId}">
                             <legend>${this.name}</legend>
-                            <img style="width: 100%;" src="${fighterIcons[this.fighterId]}" />
+                            <img style="width: 100%;" src="${fighters[this.fighterId].icon}" />
                             <br/>
                             <div role="progressbar" class="animate">
                                 <div class="health-bar" style="width: 100%"></div>
@@ -125,27 +138,31 @@
 		        let f1 = new Fighter(100, 10);
 		        let f2 = new Fighter(100, 10);
 		        
-		        $("#attack").click((event) =>
-		        {
-		            console.log("attack");
-		            
-		            $("#attack").attr("disabled", true);
-		            
-		            const f1Damage = f1.rollAttack();
-		            const f2Damage = f2.rollAttack();
-		            
-		            if (f1Damage > f2Damage)
-		            {
-		                console.log("F1 wins!");
-		                f2.damage(f1Damage);
-		            }
-	                else if (f2Damage > f1Damage)
-	                {
-	                    console.log("F2 wins!");
-	                    f1.damage(f2Damage);
-	                }
+                $("#attack").click((event) =>
+                {
+                    console.log("attack");
+                    
+                    $("#attack").attr("disabled", true);
+                    
+                    const f1Damage = f1.rollAttack();
+                    const f2Damage = f2.rollAttack();
+                    
+                    if (f1Damage > f2Damage)
+                    {
+                        console.log("F1 wins!");
+                        f2.damage(f1Damage);
+
+                    }
+                    else if (f2Damage > f1Damage)
+                    {
+                        console.log("F2 wins!");
+                        f1.damage(f2Damage);
+                    }
                     else
+                    {
+                        $(".window-body").append("<div class='draw'>Draw!</div>");
                         console.log("Round was a draw!");
+                    }
                     
                     setTimeout(() => {
                         if (f1.health <= 0 || f2.health <= 0)
@@ -156,28 +173,12 @@
                             $("#fighters").empty();
                             
                             f1 = new Fighter(100, 10);
-    		                f2 = new Fighter(100, 10);
+                            f2 = new Fighter(100, 10);
                         }
                         
                         $("#attack").attr("disabled", false);
                     }, 1100);
-                    
-                    /*
-                    $(`.fighter${f1.fighterId} img`).addClass("f1Attack");
-                    
-                    setTimeout(() => {
-                        $(`.fighter${f1.fighterId} img`).removeClass("f1Attack");
-                        
-                        $(`.fighter${f2.fighterId} img`).addClass("f2Attack");
-                        
-                        setTimeout(() => {
-                            $(`.fighter${f2.fighterId} img`).removeClass("f2Attack");
-                            
-                            $("#attack").attr("disabled", false);
-                        }, 1100);
-                    }, 1100);
-                    */
-		        });
+                });
 		    });
 		</script>
 		
