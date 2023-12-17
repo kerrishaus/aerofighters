@@ -49,12 +49,13 @@
 		        
 		        class Fighter
 		        {
-		            constructor(health, strength)
+		            constructor(health, armor, strength)
 		            {
 		                this.fighterId = Math.floor(Math.random() * fighters.length);
 
 		                this.name     = fighters[this.fighterId].name;
 		                this.health   = health;
+		                this.armor    = armor;
 		                this.strength = strength;
 		                
 		                $("#fighters").append(`
@@ -62,11 +63,13 @@
                             <legend>${this.name}</legend>
                             <img style="width: 100%;" src="${fighters[this.fighterId].icon}" />
                             <br/>
-                            <div role="progressbar" class="animate">
+                            <div role="progressbar">
                                 <div class="health-bar" style="width: 100%"></div>
                             </div>
                             <p>
-                                Health: <span class="health">${this.health}</span>
+                                Health: <span class="health">${this.health}</span> <span class="last-damage" damage="0"></span>
+                                <br/>
+                                Armor: <span class="armor">${this.armor}</span> <span class="last-armor" damage="0"></span>
                                 <br/>
                                 Strength: <span class="strength">${this.strength}</span>
                             </p>
@@ -83,12 +86,7 @@
 		            
 		            rollAttack()
                     {
-                        let sum = 0, rollCount = this.strength;
-            
-                        console.log(`${this.name} will roll ${rollCount} times.`);
-            
-                        for (let i = 0; i < rollCount; i++) 
-                            sum += Math.floor(Math.random() * 6) + 1;
+                        let sum = Math.floor(Math.random() * 20) + 1 + this.strength;
             
                         console.log(`${this.name} rolls a ${sum}`);
                         
@@ -97,38 +95,48 @@
                     
                     damage(amount)
                     {
-                        // TODO: strength checks
+                        this.health -= amount - this.armor;
                         
-                        this.health -= amount;
+                        const previousArmor = this.armor;
+                        const newArmor = this.armor - amount;
                         
-                        if (this.health <= 0)
-                        {
-                            this.health = 0;
+                        if (newArmor < 0)
+                            this.armor = 0;
+                        
+                        const armorDiff = previousArmor - this.armor;
                             
-                            $(`.fighter[data-fighterId="${this.fighterId}"] img`).addClass("dead");
-                        }
+                        if (this.health <= 0)
+                            this.health = 0;
                         
-                        $(`.fighter[data-fighterId="${this.fighterId}"] .health`  ).text(this.health);
-                        $(`.fighter[data-fighterId="${this.fighterId}"] .strength`).text(this.strength);
+                        setTimeout(() => {
+                            $(`.fighter[data-fighterId="${this.fighterId}"] .health`     ).text(this.health);
+                            $(`.fighter[data-fighterId="${this.fighterId}"] .armor`      ).text(this.armor);
+                            $(`.fighter[data-fighterId="${this.fighterId}"] .strength`   ).text(this.strength);
+                            
+                            // reset the last damage for all other fighters
+                            $(`.fighter .last-damage, .fighter .last-damage`             ).attr("damage", 0);
+                            $(`.fighter[data-fighterId="${this.fighterId}"] .last-damage`).attr("damage", amount);
+                            $(`.fighter[data-fighterId="${this.fighterId}"] .last-armor` ).attr("damage", armorDiff);
                         
-                        $(`.fighter[data-fighterId="${this.fighterId}"] img`).addClass("shake");
-                        
-                        setTimeout(() =>
-                        {
-                            $(`.fighter[data-fighterId="${this.fighterId}"] img`).removeClass("shake");
-                        }, 400);
-                        
-                        $(`.fighter[data-fighterId="${this.fighterId}"] .health-bar`).css({ width: this.health + "%"});
-                        
-                        if (this.health < 25)
-                            $(`.fighter[data-fighterId="${this.fighterId}"] div[role="progressbar"]`).addClass("error");
-                        else if (this.health < 60)
-                            $(`.fighter[data-fighterId="${this.fighterId}"] div[role="progressbar"]`).addClass("paused");
+                            $(`.fighter[data-fighterId="${this.fighterId}"] img`).addClass("shake");
+                            
+                            setTimeout(() =>
+                            {
+                                $(`.fighter[data-fighterId="${this.fighterId}"] img`).removeClass("shake");
+                            }, 500);
+                            
+                            $(`.fighter[data-fighterId="${this.fighterId}"] .health-bar`).css({ width: this.health + "%"});
+                            
+                            if (this.health < 25)
+                                $(`.fighter[data-fighterId="${this.fighterId}"] div[role="progressbar"]`).addClass("error");
+                            else if (this.health < 60)
+                                $(`.fighter[data-fighterId="${this.fighterId}"] div[role="progressbar"]`).addClass("paused");
+                        }, 800);
                     }
 		        }
 		        
-		        let f1 = new Fighter(100, 10);
-		        let f2 = new Fighter(100, 10);
+		        let f1 = new Fighter(100, 10, 30);
+		        let f2 = new Fighter(100, 10, 5);
 		        
                 $("#attack").click((event) =>
                 {
@@ -139,45 +147,74 @@
                     const f1Damage = f1.rollAttack();
                     const f2Damage = f2.rollAttack();
                     
-                    if (f1Damage > f2Damage)
-                    {
-                        console.log("F1 wins!");
-                        $(`.fighter[data-fighterId="${f2.fighterId}"]`).append("<div id='attackResult'>" + f1Damage + "</div>");
-                        f2.damage(f1Damage);
-
-                    }
-                    else if (f2Damage > f1Damage)
-                    {
-                        console.log("F2 wins!");
-                        $(`.fighter[data-fighterId="${f1.fighterId}"]`).append("<div id='attackResult'>" + f2Damage + "</div>");
-                        f1.damage(f2Damage);
-                    }
-                    else
-                    {
-                        $(".window-body").append("<div id='attackResult'>Draw!</div>");
-                        console.log("Round was a draw!");
-                    }
+                    $(`.fighter[data-fighterId="${f1.fighterId}"]`).append("<div class='attackResult'>" + f1Damage + "</div>");
                     
                     setTimeout(() => {
-                        if (f1.health <= 0 || f2.health <= 0)
-                        {
-                            if (fighters > 5)
-                                $(".window-body").text("You've played enough!");
-                            
-                            $("#fighters").empty();
-                            
-                            f1 = new Fighter(100, 10);
-                            f2 = new Fighter(100, 10);
-                        }
+                        $(`.fighter[data-fighterId="${f2.fighterId}"]`).append("<div class='attackResult'>" + f2Damage + "</div>");
                         
-                        $("#attackResult").remove();
-                        $("#attack").attr("disabled", false);
-                    }, 1100);
+                        setTimeout(() => {
+                            let deathDelay = 0;
+                            
+                            if (f1Damage > f2Damage)
+                            {
+                                console.log("F1 wins!");
+                                $(`.fighter[data-fighterId="${f2.fighterId}"] .attackResult`).remove();
+                                $(`.fighter[data-fighterId="${f1.fighterId}"] .attackResult`).addClass("attack");
+                                f2.damage(f1Damage);
+                                
+                                if (f2.health <= 0)
+                                {
+                                    deathDelay = 1000;
+                                    setTimeout(() => {
+                                        $(`.fighter[data-fighterId="${f2.fighterId}"] img`).addClass("dead");
+                                    }, 1000);
+                                }
+                            }
+                            else if (f2Damage > f1Damage)
+                            {
+                                console.log("F2 wins!");
+                                $(`.fighter[data-fighterId="${f1.fighterId}"] .attackResult`).remove();
+                                $(`.fighter[data-fighterId="${f2.fighterId}"] .attackResult`).addClass("attack");
+                                f1.damage(f2Damage);
+                                
+                                if (f1.health <= 0)
+                                {
+                                    setTimeout(() => {
+                                        $(`.fighter[data-fighterId="${f1.fighterId}"] img`).addClass("dead");
+                                    }, 1000);
+                                    deathDelay = 1000;
+                                }
+                            }
+                            else
+                            {
+                                $(".window-body").append("<div class='attackResult'>Draw!</div>");
+                                console.log("Round was a draw!");
+                            }
+                            
+                            $(`.fighter[data-fighterId="${this.fighterId}"] img`).addClass("dead");
+                        
+                            setTimeout(() => {
+                                if (f1.health <= 0 || f2.health <= 0)
+                                {
+                                    if (fighters > 5)
+                                        $(".window-body").text("You've played enough!");
+                                    
+                                    $("#fighters").empty();
+                                    
+                                    f1 = new Fighter(100, 10, 7);
+                                    f2 = new Fighter(100, 10, 5);
+                                }
+                                
+                                $(".attackResult").remove();
+                                $("#attack").attr("disabled", false);
+                            }, 1200 + deathDelay);
+                        }, 1000);
+                    }, 1000);
                 });
 		    });
 		</script>
 		
-		<div class="window draggable resizable glass active">
+		<div class="window draggable resizable glass active" style="width: 300px;">
           <div class="title-bar">
             <div class="title-bar-text">Fighting Game</div>
                 <div class="title-bar-controls">
