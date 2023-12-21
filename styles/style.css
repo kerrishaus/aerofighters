@@ -21,8 +21,8 @@ body
 
 .window
 {
-    height: unset;
-	width:380px;
+    height: fit-content;
+	width: 380px;
     
 	position:absolute;
 	left:25vw;
